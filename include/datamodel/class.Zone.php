@@ -8,16 +8,18 @@ class Zone extends DataObject {
 
     const PROPERTY_ID = 'id';
     const PROPERTY_SYMNAME = 'symname';
-    const PROPERTY_FILE = 'description';
+    const PROPERTY_FILE = 'file';
     const PROPERTY_FILE_LAST_UPDATE = 'file_last_update';
-    const PROPERTY_MNAME = 'products';
-    const PROPERTY_RNAME = 'ordering';
-    const PROPERTY_SERIAL_DATE = 'serial_date';
-    const PROPERTY_SERIAL_COUNTER = 'serial_counter';
-    const PROPERTY_REFRESH = 'refresh';
-    const PROPERTY_RETRY = 'retry';
-    const PROPERTY_EXPIRE = 'expire';
+    const PROPERTY_ORIGIN = 'origin';
     const PROPERTY_TTL = 'ttl';
+    const PROPERTY_SOA_MNAME = 'soa_mname';
+    const PROPERTY_SOA_RNAME = 'soa_rname';
+    const PROPERTY_SOA_SERIAL_DATE = 'soa_serial_date';
+    const PROPERTY_SOA_SERIAL_COUNTER = 'soa_serial_counter';
+    const PROPERTY_SOA_REFRESH = 'soa_refresh';
+    const PROPERTY_SOA_RETRY = 'soa_retry';
+    const PROPERTY_SOA_EXPIRE = 'soa_expire';
+    const PROPERTY_SOA_TTL = 'soa_ttl';
 
     const PROPERTIES = array(
         self::PROPERTY_ID => array(
@@ -39,42 +41,52 @@ class Zone extends DataObject {
             'set' => '*auto*',
             'table_field' => '*auto*'
         ),
-        self::PROPERTY_MNAME => array(
-            'get' => '*auto*',
-            'set' => '*auto*',
-            'table_field' => '*auto*'
-        ),
-        self::PROPERTY_RNAME => array(
-            'get' => '*auto*',
-            'set' => '*auto*',
-            'table_field' => '*auto*'
-        ),
-        self::PROPERTY_SERIAL_DATE => array(
-            'get' => '*auto*',
-            'set' => '*auto*',
-            'table_field' => '*auto*'
-        ),
-        self::PROPERTY_SERIAL_COUNTER => array(
-            'get' => '*auto*',
-            'set' => '*auto*',
-            'table_field' => '*auto*'
-        ),
-        self::PROPERTY_REFRESH => array(
-            'get' => '*auto*',
-            'set' => '*auto*',
-            'table_field' => '*auto*'
-        ),
-        self::PROPERTY_RETRY => array(
-            'get' => '*auto*',
-            'set' => '*auto*',
-            'table_field' => '*auto*'
-        ),
-        self::PROPERTY_EXPIRE => array(
+        self::PROPERTY_ORIGIN => array(
             'get' => '*auto*',
             'set' => '*auto*',
             'table_field' => '*auto*'
         ),
         self::PROPERTY_TTL => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_MNAME => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_RNAME => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_SERIAL_DATE => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_SERIAL_COUNTER => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_REFRESH => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_RETRY => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_EXPIRE => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_SOA_TTL => array(
             'get' => '*auto*',
             'set' => '*auto*',
             'table_field' => '*auto*'
@@ -108,6 +120,14 @@ class Zone extends DataObject {
     public function getDomains()
     {
         return Domain::byZone($this);
+    }
+
+    public function needsUpdate() {
+        foreach ($this->getDomains() as $domain) {
+            if ($domain->last_update >= $this->data[$this->fieldName(self::PROPERTY_FILE_LAST_UPDATE)])
+                return true;
+        }
+        return false;
     }
 
 }
