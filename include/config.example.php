@@ -11,4 +11,8 @@
     define('MYSQL_PASSWORD', 'dyndns');
     define('MYSQL_DATABASE', 'dyndns');
 
+    // Update key2 time-to-live
+    define('KEY2_VALID_TIME_PRE', 5);
+    define('KEY2_VALID_TIME_POST', 10);
+
 ?>
