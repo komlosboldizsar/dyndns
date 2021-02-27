@@ -122,6 +122,11 @@ class Zone extends DataObject {
         return Domain::byZone($this);
     }
 
+    public function getExtraRecords()
+    {
+        return ExtraRecord::byZone($this);
+    }
+
     public function needsUpdate() {
         foreach ($this->getDomains() as $domain) {
             if ($domain->last_update >= $this->data[$this->fieldName(self::PROPERTY_FILE_LAST_UPDATE)])
