@@ -129,7 +129,7 @@ class Zone extends DataObject {
 
     public function needsUpdate() {
         foreach ($this->getDomains() as $domain) {
-            if ($domain->last_update >= $this->data[$this->fieldName(self::PROPERTY_FILE_LAST_UPDATE)])
+            if ($domain->last_change >= $this->data[$this->fieldName(self::PROPERTY_FILE_LAST_UPDATE)])
                 return true;
         }
         return false;

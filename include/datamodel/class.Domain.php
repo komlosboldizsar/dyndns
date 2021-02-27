@@ -13,6 +13,7 @@ class Domain extends DataObject {
     const PROPERTY_UPDATE_KEY_1 = 'update_key_1';
     const PROPERTY_UPDATE_KEY_2 = 'update_key_2';
     const PROPERTY_LAST_UPDATE = 'last_update';
+    const PROPERTY_LAST_CHANGE = 'last_change';
 
     const PROPERTIES = array(
         self::PROPERTY_ID => array(
@@ -45,6 +46,11 @@ class Domain extends DataObject {
             'table_field' => '*auto*'
         ),
         self::PROPERTY_LAST_UPDATE => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+        self::PROPERTY_LAST_CHANGE => array(
             'get' => '*auto*',
             'set' => '*auto*',
             'table_field' => '*auto*'
@@ -91,8 +97,12 @@ class Domain extends DataObject {
             return false;
         if (!$this->checkHash2($hash2))
             return false;
+        $oldIp = $this->data[$this->fieldName(self::PROPERTY_IP_ADDRESS)];
         $this->data[$this->fieldName(self::PROPERTY_IP_ADDRESS)] = $ip;
-        $this->data[$this->fieldName(self::PROPERTY_LAST_UPDATE)] = time();
+        $time = time();
+        $this->data[$this->fieldName(self::PROPERTY_LAST_UPDATE)] = $time;
+        if ($oldIp != $ip)
+            $this->data[$this->fieldName(self::PROPERTY_LAST_CHANGE)] = $time;
         $this->save();
         return true;
     }
