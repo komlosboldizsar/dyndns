@@ -1,6 +1,6 @@
 <?php
 
-    include 'include/include.php';
+    include 'include/_includes.php';
     use DynDns\Datamodel\Domain;
 
     $domainId = $_GET['domain'];
