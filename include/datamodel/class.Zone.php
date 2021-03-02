@@ -136,6 +136,8 @@ class Zone extends DataObject {
     }
 
     public function needsUpdate() {
+        if ($this->data[$this->fieldName(self::PROPERTY_FILE_FORCE_UPDATE)])
+            return true;
         foreach ($this->getDomains() as $domain) {
             if ($domain->last_change >= $this->data[$this->fieldName(self::PROPERTY_FILE_LAST_UPDATE)])
                 return true;
@@ -179,6 +181,7 @@ class Zone extends DataObject {
 
         file_put_contents($this->data[$this->fieldName(self::PROPERTY_FILE)], $fileContent);
         $this->data[$this->fieldName(self::PROPERTY_FILE_LAST_UPDATE)] = time();
+        $this->data[$this->fieldName(self::PROPERTY_FILE_FORCE_UPDATE)] = false;
         $this->save();
 
     }
