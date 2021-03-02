@@ -8,8 +8,8 @@ KEY2="04f82c44cb5c7182d6475fbee9d1d81f"
 # << Configuration end
 
 # Don't change code below
-DATETIME=`date +"%Y%m%d"`
-HASH2PLAIN="{$KEY2}:{$DATETIME}"
-HASH2=`echo $HASH2PLAIN | md5sum | cut -c1-32`
-FULLURL="{$URL}?id={$DOMAIN_ID}&key1={$KEY1}&hash2={$HASH2}"
+DATETIME=`date +"%Y%m%d%H%M%S"`
+HASH2PLAIN="${KEY2}:${DATETIME}"
+HASH2=`echo -n $HASH2PLAIN | md5sum | cut -c1-32`
+FULLURL="${URL}?domain=${DOMAIN_ID}&key1=${KEY1}&hash2=${HASH2}"
 curl $FULLURL
