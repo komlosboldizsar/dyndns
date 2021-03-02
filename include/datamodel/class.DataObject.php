@@ -2,9 +2,9 @@
 
 namespace DynDns\Datamodel;
 
-use Webpage\Datamodel\Exceptions\PropertyNotExistsException;
-use Webpage\MySQL\MySQLconnection;
-use Webpage\MySQL\MySQLqueryparam;
+use DynDns\Datamodel\Exceptions\PropertyNotExistsException;
+use DynDns\MySQL\MySQLconnection;
+use DynDns\MySQL\MySQLqueryparam;
 
 abstract class DataObject {
 
