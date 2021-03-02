@@ -51,13 +51,13 @@ while [ "$1" != "" ]; do
                                 CHMOD_DIRECTORIES=$1
                                 ;;
         -mp | --mproject )      shift
-                                $CHMOD_PROJECT=$1
+                                CHMOD_PROJECT=$1
                                 ;;
         -mc | --mcli )          shift
-                                $CHMOD_CLI=$1
+                                CHMOD_CLI=$1
                                 ;;
         -md | --mclient )       shift
-                                $CHMOD_CLIENT=$1
+                                CHMOD_CLIENT=$1
                                 ;;
         -ou | --ouser )         shift
                                 OWNER_USER=$1
