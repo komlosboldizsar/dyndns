@@ -106,7 +106,7 @@ function dyndns_error_handler($errno, $errstr, $errfile, $errline) {
     debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
     $backtrace = ob_get_contents();
     ob_end_clean();
-    webpage_logerror($errorType['class'], $typeText, $errstr, $errfile, $errline, $backtrace, $show);
+    dyndns_logerror($errorType['class'], $typeText, $errstr, $errfile, $errline, $backtrace, $show);
 
     if ($errorType['fatal'])
         die();
@@ -116,7 +116,7 @@ function dyndns_error_handler($errno, $errstr, $errfile, $errline) {
 }
 
 function dyndns_exception_handler(Throwable $exception) {
-    webpage_logerror('exception',
+    dyndns_logerror('exception',
         'Exception ('.get_class($exception).')',
         $exception->getMessage(),
         $exception->getFile(),
