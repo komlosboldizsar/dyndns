@@ -91,11 +91,47 @@ function printWithColor() {
   echo -e "\e[$2m\e[$3m[updater] $1\e[49m\e[39m"
 }
 
+function cdBack() {
+  printWithColor "Switching back to $CW_DIR..." 46 30
+  cd $CW_DIR
+}
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 CW_DIR=`pwd`
 
 printWithColor "Switching to $SCRIPT_DIR..." 46 30
 cd $SCRIPT_DIR
+printWithColor "Checking differences from remote repository..." 45 30
+WCL_ADD=`git diff | egrep '^\+' | wc -l`
+WCL_REMOVE=`git diff | egrep '^\-' | wc -l`
+if [ $WCL_ADD -gt 0 ] || [ $WCL_REMOVE -gt 0 ]; then
+  printWithColor "Found difference in the content of files." 41 30
+  printWithColor "Please commit and push or reset them before continuing the update." 41 30
+  cdBack
+  printWithColor "Exit." 41 30
+  exit 1
+fi
+WCL_GITDIFF=`git diff | wc -l`
+if [ "$WCL_GITDIFF" -eq 0]; fi
+  printWithColors "No difference found." 42 30
+else
+  WCL_DIFF=`git diff | egrep '^diff' | wc -l`
+  WCL_NEWMODE=`git diff | egrep '^new mode' | wc -l`
+  WCL_OLDMODE=`git diff | egrep '^old mode' | wc -l`
+  WCL_TOTAL=$((WCL_DIFF + WCL_NEWMODE + WCL_OLDMODE))
+  if [ "$WCL_TOTAL" -eq "$WCL_GITDIFF" ]; then
+    printWithColor "Difference only found in file modes." 42 30
+    printWithColor "Reseting local repository..." 45 30
+    git reset --hard
+  else
+    printWithColor "Unknown difference found or error occurred." 41 30
+    printWithColor "Please check with 'git diff' and 'git status' before continuing the update." 41 30
+    cdBack
+    printWithColor "Exit." 41 30
+    exit 2
+  fi
+fi
+
 printWithColor "git pull" 45 30
 git pull
 printWithColor "Set owners" 45 30
@@ -118,6 +154,6 @@ find cli -type f -exec chmod $CHMOD_CLI {} \;
 find client -type f -exec chmod $CHMOD_CLIENT {} \;
 chmod $CHMOD_PROJECT .gitignore update.sh
 chmod +x update.sh
-printWithColor "Switching back to $CW_DIR..." 46 30
-cd $CW_DIR
+cdBack
 printWithColor "Ready." 42 30
+exit 0
