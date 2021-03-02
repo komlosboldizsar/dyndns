@@ -102,6 +102,14 @@ CW_DIR=`pwd`
 printWithColor "Switching to $SCRIPT_DIR..." 46 30
 cd $SCRIPT_DIR
 printWithColor "Checking differences from remote repository..." 45 30
+WCL_LOG=`git log origin/master..HEAD | wc -l`
+if [ $WCL_LOG -gt 0 ]; then
+  printWithColor "Found pending commits." 41 30
+  printWithColor "Please push them or reset branch before continuing the update." 41 30
+  cdBack
+  printWithColor "Exit." 41 30
+  exit 1
+fi
 WCL_ADD=`git diff | egrep '^\+' | wc -l`
 WCL_REMOVE=`git diff | egrep '^\-' | wc -l`
 if [ $WCL_ADD -gt 0 ] || [ $WCL_REMOVE -gt 0 ]; then
@@ -109,7 +117,7 @@ if [ $WCL_ADD -gt 0 ] || [ $WCL_REMOVE -gt 0 ]; then
   printWithColor "Please commit and push or reset them before continuing the update." 41 30
   cdBack
   printWithColor "Exit." 41 30
-  exit 1
+  exit 2
 fi
 WCL_GITDIFF=`git diff | wc -l`
 if [ "$WCL_GITDIFF" -eq 0 ]; then
@@ -128,7 +136,7 @@ else
     printWithColor "Please check with 'git diff' and 'git status' before continuing the update." 41 30
     cdBack
     printWithColor "Exit." 41 30
-    exit 2
+    exit 3
   fi
 fi
 
