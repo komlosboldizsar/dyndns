@@ -1,0 +1,6 @@
+Order deny,allow
+Deny from all
+
+<Files "update-ip.php">
+    Allow from all
+</Files>
