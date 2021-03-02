@@ -109,7 +109,7 @@ class Domain extends DataObject {
 
     public function checkHash2($hash2) {
         $startTime = time();
-        for ($i = KEY2_VALID_TIME_PRE; $i >= KEY2_VALID_TIME_POST; $i++) {
+        for ($i = KEY2_VALID_TIME_PRE; $i >= -1 * KEY2_VALID_TIME_POST; $i--) {
             $t = $startTime + $i;
             $h = md5(sprintf("%s:%s",
                 $this->data[$this->fieldName(self::PROPERTY_UPDATE_KEY_2)],
