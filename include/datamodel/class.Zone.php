@@ -139,7 +139,7 @@ class Zone extends DataObject {
 
         list($rname1, $rname2) = explode('@', $this->data[$this->fieldName(self::PROPERTY_SOA_RNAME)]);
         $rname1 = str_replace('.', '\.', $rname1);
-        $rname = $rname1 . '.' . $rname2;
+        $rname = $rname1 . '.' . $rname2 . '.';
 
         $soa_serial_date = &$this->data[$this->fieldName(self::PROPERTY_SOA_SERIAL_DATE)];
         $soa_serial_counter = &$this->data[$this->fieldName(self::PROPERTY_SOA_SERIAL_COUNTER)];
