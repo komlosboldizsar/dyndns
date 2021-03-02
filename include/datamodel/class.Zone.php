@@ -10,6 +10,7 @@ class Zone extends DataObject {
     const PROPERTY_SYMNAME = 'symname';
     const PROPERTY_FILE = 'file';
     const PROPERTY_FILE_LAST_UPDATE = 'file_last_update';
+    const PROPERTY_FILE_FORCE_UPDATE = 'file_force_update';
     const PROPERTY_ORIGIN = 'origin';
     const PROPERTY_TTL = 'ttl';
     const PROPERTY_SOA_MNAME = 'soa_mname';
@@ -40,6 +41,13 @@ class Zone extends DataObject {
             'get' => '*auto*',
             'set' => '*auto*',
             'table_field' => '*auto*'
+        ),
+        self::PROPERTY_FILE_FORCE_UPDATE => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*',
+            'convert_bool' => true,
+            'default' => true
         ),
         self::PROPERTY_ORIGIN => array(
             'get' => '*auto*',
