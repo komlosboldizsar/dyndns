@@ -8,8 +8,9 @@ class Domain extends DataObject {
 
     const PROPERTY_ID = 'id';
     const PROPERTY_ZONE_ID = 'zone_id';
-    const PROPERTY_NAME = 'name';
+    const PROPERTY_NAMES = 'names';
     const PROPERTY_IP_ADDRESS = 'ip_address';
+    const PROPERTY_UPDATE_NAME = 'update_name';
     const PROPERTY_UPDATE_KEY_1 = 'update_key_1';
     const PROPERTY_UPDATE_KEY_2 = 'update_key_2';
     const PROPERTY_LAST_UPDATE = 'last_update';
@@ -25,12 +26,17 @@ class Domain extends DataObject {
             'set' => '*auto*',
             'table_field' => '*auto*'
         ),
-        self::PROPERTY_NAME => array(
+        self::PROPERTY_NAMES => array(
             'get' => '*auto*',
             'set' => '*auto*',
             'table_field' => '*auto*'
         ),
         self::PROPERTY_IP_ADDRESS => array(
+            'get' => '*auto*',
+            'set' => '*auto*',
+            'table_field' => '*auto*'
+        ),
+		self::PROPERTY_UPDATE_NAME => array(
             'get' => '*auto*',
             'set' => '*auto*',
             'table_field' => '*auto*'
@@ -68,7 +74,7 @@ class Domain extends DataObject {
     }
 
     const ORDERING_DEFAULT = array(
-        self::PROPERTY_NAME => DataObject::ORDER_ASC
+        self::PROPERTY_UPDATE_NAME => DataObject::ORDER_ASC
     );
 
     public static function all($ordering = self::ORDERING_DEFAULT)
@@ -79,6 +85,11 @@ class Domain extends DataObject {
     public static function filter($criteria = null, $ordering = self::ORDERING_DEFAULT)
     {
         return DataObject::_filter(get_class(), $criteria, $ordering);
+    }
+	
+	public static function byUpdateName($name)
+    {
+        return static::filter(array('update_name' => $name));
     }
 
     public static function byZone($zone)
