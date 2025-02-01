@@ -121,7 +121,7 @@ if [ $WCL_ADD -gt 0 ] || [ $WCL_REMOVE -gt 0 ]; then
 fi
 WCL_GITDIFF=`git diff | wc -l`
 if [ "$WCL_GITDIFF" -eq 0 ]; then
-  printWithColors "No difference found." 42 30
+  printWithColor "No difference found." 42 30
 else
   WCL_DIFF=`git diff | egrep '^diff' | wc -l`
   WCL_NEWMODE=`git diff | egrep '^new mode' | wc -l`
