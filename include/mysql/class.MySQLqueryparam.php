@@ -27,6 +27,18 @@ class MySQLqueryparam {
     {
         return $this->value;
     }
+	
+	public static function autoType($value)
+	{
+		if(is_int($value))
+			return new MySQLqueryparam(MySQLqueryparam::INTEGER, $value)
+		else if (is_float($value) || is_double($value))
+			return new MySQLqueryparam(MySQLqueryparam::DOUBLE, $value);
+		else if (is_bool($value))
+			return new MySQLqueryparam(MySQLqueryparam::INTEGER, ($value) ? 1 : 0);
+		else
+			return new MySQLqueryparam(MySQLqueryparam::STRING, $value);
+	}
 
 }
 

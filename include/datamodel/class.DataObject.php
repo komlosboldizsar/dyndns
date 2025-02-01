@@ -2,6 +2,7 @@
 
 namespace DynDns\Datamodel;
 
+use DynDns\Datamodel\FilterCriteria;
 use DynDns\Datamodel\Exceptions\PropertyNotExistsException;
 use DynDns\MySQL\MySQLconnection;
 use DynDns\MySQL\MySQLqueryparam;
@@ -87,18 +88,8 @@ abstract class DataObject {
 
                 if (isset($this->data[$field]) && ($this->data[$field] !== null) && ($field != $this->idField())) {
                     $value = $this->data[$field];
-                    if(is_int($value)) {
-                        $type = MySQLqueryparam::INTEGER;
-                    } else if (is_float($value) || is_double($value)) {
-                        $type = MySQLqueryparam::DOUBLE;
-                    } else if (is_bool($value)) {
-                        $value = ($value) ? 1 : 0;
-                        $type = MySQLqueryparam::INTEGER;
-                    } else {
-                        $type = MySQLqueryparam::STRING;
-                    }
                     $values[] = "?";
-                    $params[] = new MySQLqueryparam($type, $value);
+                    $params[] = MySQLqueryparam::autoType($value);
                 } else{
                     $values[] = "NULL";
                 }
@@ -253,15 +244,26 @@ abstract class DataObject {
             throw new \Exception();
 
         $criteriaStr = '';
-        if (is_string($criteria))
+		$queryParams = array();
+        if (is_string($criteria)) {
             $criteriaStr = ' WHERE '.$criteria;
-        else if (is_array($criteria))
-            throw new \Exception("Arrays as criteria: not implemented.");
+        }
+		if (is_array($criteria)) {
+			$criteriaParts = array();
+			foreach ($criteria as $criteriaKey => $criteriaValue)
+				$criteriaParts[] = new FilterCriteriaEq($criteriaKey, $criteriaValue);
+			$criteria = new FilterCriteriaAnd($criteriaParts);
+		}
+		if ($criteria instanceof FilterCriteria) {
+			$criteriaData = $criteria->toMysqlQueryPart();
+            $criteriaStr = ' WHERE '.$criteriaData->queryString;
+			$queryParams = $criteriaData->queryParams;
+		}
 
         $orderingStr = static::__orderingArrayToString($dummyObject, $ordering);
 
         $idsQueryString = sprintf('SELECT `%s` FROM %s%s%s;', $dummyObject->idField(), $dummyObject->tableName(), $criteriaStr, $orderingStr);
-        $idsQuery = MySQLconnection::defaultConnection()->query($idsQueryString, array(), true, MySQLconnection::FETCH_ARRAY_INDEX);
+        $idsQuery = MySQLconnection::defaultConnection()->query($idsQueryString, $queryParams, true, MySQLconnection::FETCH_ARRAY_INDEX);
         if (!$idsQuery->isSuccessful())
             return null;
 
